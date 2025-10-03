@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cohort - progress Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.8); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .float-animation { animation: float 3s ease-in-out infinite; }
+        .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+        .slide-in { animation: slideIn 0.5s ease-out; }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <!-- Main Container -->
+    <div id="app" class="min-h-screen">
+        <!-- Landing Page -->
+        <div id="landingPage" class="min-h-screen flex items-center justify-center p-4">
+            <div class="text-center slide-in">
+                <div class="float-animation mb-8">
+                    <h1 class="text-6xl font-bold text-white mb-4">🎓 COHORT</h1>
+                    <p class="text-xl text-blue-100 mb-8">Gamified Learning Management System</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                    <!-- Student Login -->
+                    <div class="card-hover bg-white rounded-2xl p-6 shadow-xl cursor-pointer" onclick="showLogin('student')">
+                        <div class="text-6xl mb-4">👨‍🎓</div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Students</h3>
+                        <p class="text-gray-600">Access your dashboard, scores & rankings</p>
+                        <div class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg font-semibold">Login</div>
+                    </div>
+                    
+                    <!-- Mentor Login -->
+                    <div class="card-hover bg-white rounded-2xl p-6 shadow-xl cursor-pointer" onclick="showLogin('mentor')">
+                        <div class="text-6xl mb-4">👨‍🏫</div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Mentors</h3>
+                        <p class="text-gray-600">Manage students & announcements</p>
+                        <div class="mt-4 bg-green-500 text-white py-2 px-4 rounded-lg font-semibold">Login</div>
+                    </div>
+                    
+                    <!-- Floor Wing Login -->
+                    <div class="card-hover bg-white rounded-2xl p-6 shadow-xl cursor-pointer" onclick="showLogin('floorWing')">
+                        <div class="text-6xl mb-4">🏢</div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Floor Wing</h3>
+                        <p class="text-gray-600">Floor-wise student management</p>
+                        <div class="mt-4 bg-purple-500 text-white py-2 px-4 rounded-lg font-semibold">Login</div>
+                    </div>
+                    
+                    <!-- Admin Login -->
+                    <div class="card-hover bg-white rounded-2xl p-6 shadow-xl cursor-pointer" onclick="showLogin('admin')">
+                        <div class="text-6xl mb-4">⚙️</div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Admin</h3>
+                        <p class="text-gray-600">Complete system overview</p>
+                        <div class="mt-4 bg-red-500 text-white py-2 px-4 rounded-lg font-semibold">Login</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Login Modal -->
+        <div id="loginModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="bg-white rounded-2xl p-8 max-w-md w-full slide-in">
+                <div class="text-center mb-6">
+                    <div id="loginIcon" class="text-6xl mb-4">👨‍🎓</div>
+                    <h2 id="loginTitle" class="text-3xl font-bold text-gray-800">Student Login</h2>
+                </div>
+                
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Name</label>
+                            <input type="text" id="loginName" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Password</label>
+                            <input type="password" id="loginPassword" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4 mt-6">
+                        <button type="button" onclick="closeLogin()" class="flex-1 bg-gray-500 text-white py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors">Cancel</button>
+                        <button type="submit" class="flex-1 bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Student Registration Modal -->
+        <div id="registrationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="bg-white rounded-2xl p-8 max-w-md w-full slide-in">
+                <div class="text-center mb-6">
+                    <div class="text-6xl mb-4">📝</div>
+                    <h2 class="text-3xl font-bold text-gray-800">Student Registration</h2>
+                    <p class="text-gray-600">First time? Let's get you set up!</p>
+                </div>
+                
+                <form id="registrationForm" onsubmit="handleRegistration(event)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Full Name</label>
+                            <input type="text" id="regName" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Department</label>
+                            <select id="regDepartment" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                <option value="">Select Department</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Mechanical">Mechanical</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Chemical">Chemical</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Mentor Name</label>
+                            <input type="text" id="regMentor" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Floor Number</label>
+                            <select id="regFloor" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                <option value="">Select Floor</option>
+                                <option value="Ground Floor">Ground Floor</option>
+                                <option value="1st Floor">1st Floor</option>
+                                <option value="2nd Floor">2nd Floor</option>
+                                <option value="3rd Floor">3rd Floor</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Create Password</label>
+                            <input type="password" id="regPassword" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4 mt-6">
+                        <button type="button" onclick="closeRegistration()" class="flex-1 bg-gray-500 text-white py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors">Cancel</button>
+                        <button type="submit" class="flex-1 bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Mentor Registration Modal -->
+        <div id="mentorRegistrationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="bg-white rounded-2xl p-8 max-w-md w-full slide-in">
+                <div class="text-center mb-6">
+                    <div class="text-6xl mb-4">👨‍🏫</div>
+                    <h2 class="text-3xl font-bold text-gray-800">Mentor Registration</h2>
+                    <p class="text-gray-600">Join as a new mentor!</p>
+                </div>
+                
+                <form id="mentorRegistrationForm" onsubmit="handleMentorRegistration(event)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Full Name</label>
+                            <input type="text" id="mentorRegName" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Department</label>
+                            <select id="mentorRegDepartment" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" required>
+                                <option value="">Select Department</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Mechanical">Mechanical</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Chemical">Chemical</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Floor Assignment</label>
+                            <select id="mentorRegFloor" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" required>
+                                <option value="">Select Floor</option>
+                                <option value="Ground Floor">Ground Floor</option>
+                                <option value="1st Floor">1st Floor</option>
+                                <option value="2nd Floor">2nd Floor</option>
+                                <option value="3rd Floor">3rd Floor</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Create Password</label>
+                            <input type="password" id="mentorRegPassword" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" required>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4 mt-6">
+                        <button type="button" onclick="closeMentorRegistration()" class="flex-1 bg-gray-500 text-white py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors">Cancel</button>
+                        <button type="submit" class="flex-1 bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Floor Wing Registration Modal -->
+        <div id="floorWingRegistrationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="bg-white rounded-2xl p-8 max-w-md w-full slide-in">
+                <div class="text-center mb-6">
+                    <div class="text-6xl mb-4">🏢</div>
+                    <h2 class="text-3xl font-bold text-gray-800">Floor Wing Registration</h2>
+                    <p class="text-gray-600">Become a floor manager!</p>
+                </div>
+                
+                <form id="floorWingRegistrationForm" onsubmit="handleFloorWingRegistration(event)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Full Name</label>
+                            <input type="text" id="floorWingRegName" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Floor to Manage</label>
+                            <select id="floorWingRegFloor" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" required>
+                                <option value="">Select Floor</option>
+                                <option value="Ground Floor">Ground Floor</option>
+                                <option value="1st Floor">1st Floor</option>
+                                <option value="2nd Floor">2nd Floor</option>
+                                <option value="3rd Floor">3rd Floor</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Employee ID</label>
+                            <input type="text" id="floorWingRegId" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="e.g., FW001" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Create Password</label>
+                            <input type="password" id="floorWingRegPassword" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" required>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4 mt-6">
+                        <button type="button" onclick="closeFloorWingRegistration()" class="flex-1 bg-gray-500 text-white py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors">Cancel</button>
+                        <button type="submit" class="flex-1 bg-purple-500 text-white py-3 rounded-lg font-semibold hover:bg-purple-600 transition-colors">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Admin Registration Modal -->
+        <div id="adminRegistrationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="bg-white rounded-2xl p-8 max-w-md w-full slide-in">
+                <div class="text-center mb-6">
+                    <div class="text-6xl mb-4">⚙️</div>
+                    <h2 class="text-3xl font-bold text-gray-800">Admin Registration</h2>
+                    <p class="text-gray-600">Join as system administrator!</p>
+                </div>
+                
+                <form id="adminRegistrationForm" onsubmit="handleAdminRegistration(event)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Full Name</label>
+                            <input type="text" id="adminRegName" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Admin Level</label>
+                            <select id="adminRegLevel" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" required>
+                                <option value="">Select Level</option>
+                                <option value="Super Admin">Super Admin</option>
+                                <option value="Department Admin">Department Admin</option>
+                                <option value="System Admin">System Admin</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Admin Code</label>
+                            <input type="text" id="adminRegCode" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Enter admin authorization code" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Create Password</label>
+                            <input type="password" id="adminRegPassword" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" required>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4 mt-6">
+                        <button type="button" onclick="closeAdminRegistration()" class="flex-1 bg-gray-500 text-white py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors">Cancel</button>
+                        <button type="submit" class="flex-1 bg-red-500 text-white py-3 rounded-lg font-semibold hover:bg-red-600 transition-colors">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Student Dashboard -->
+        <div id="studentDashboard" class="hidden min-h-screen p-6">
+            <div class="max-w-7xl mx-auto">
+                <!-- Header -->
+                <div class="bg-white rounded-2xl p-6 mb-6 shadow-xl">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-800">🎓 Student Dashboard</h1>
+                            <p id="studentWelcome" class="text-gray-600 mt-2">Welcome back!</p>
+                        </div>
+                        <button onclick="logout()" class="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition-colors">Logout</button>
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-6 text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-blue-100">Current Score</p>
+                                <p id="currentScore" class="text-3xl font-bold">85</p>
+                            </div>
+                            <div class="text-4xl">📊</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-6 text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-green-100">Class Rank</p>
+                                <p id="classRank" class="text-3xl font-bold">#3</p>
+                            </div>
+                            <div class="text-4xl">🏆</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl p-6 text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-purple-100">Streak</p>
+                                <p id="streak" class="text-3xl font-bold">7 days</p>
+                            </div>
+                            <div class="text-4xl">🔥</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Announcements from Mentor -->
+                <div class="bg-white rounded-2xl p-6 mb-6 shadow-xl">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">📢 Announcements from Your Mentor</h2>
+                    <div id="studentAnnouncements" class="space-y-3">
+                        <!-- Announcements will be populated here -->
+                    </div>
+                </div>
+                
+                <!-- Assessment Scores -->
+                <div class="bg-white rounded-2xl p-6 mb-6 shadow-xl">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">📈 Daily Assessment Scores</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <p class="text-gray-600">Monday</p>
+                            <p class="text-2xl font-bold text-blue-600">92</p>
+                        </div>
+                        <div class="bg-green-50 rounded-lg p-4">
+                            <p class="text-gray-600">Tuesday</p>
+                            <p class="text-2xl font-bold text-green-600">88</p>
+                        </div>
+                        <div class="bg-yellow-50 rounded-lg p-4">
+                            <p class="text-gray-600">Wednesday</p>
+                            <p class="text-2xl font-bold text-yellow-600">85</p>
+                        </div>
+                        <div class="bg-purple-50 rounded-lg p-4">
+                            <p class="text-gray-600">Thursday</p>
+                            <p class="text-2xl font-bold text-purple-600">90</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Class Rankings -->
+                <div class="bg-white rounded-2xl p-6 shadow-xl">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">🏆 Class Rankings</h2>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="text-2xl mr-3">🥇</span>
+                                <span class="font-semibold">Alex Johnson</span>
+                            </div>
+                            <span class="font-bold text-yellow-600">95</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="text-2xl mr-3">🥈</span>
+                                <span class="font-semibold">Sarah Wilson</span>
+                            </div>
+                            <span class="font-bold text-gray-600">88</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-orange-50 rounded-lg border-2 border-orange-300">
+                            <div class="flex items-center">
+                                <span class="text-2xl mr-3">🥉</span>
+                                <span class="font-semibold" id="currentStudentRank">You</span>
+                            </div>
+                            <span class="font-bold text-orange-600">85</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mentor Dashboard -->
+        <div id="mentorDashboard" class="hidden min-h-screen p-6">
+            <div class="max-w-7xl mx-auto">
+                <!-- Header -->
+                <div class="bg-white rounded-2xl p-6 mb-6 shadow-xl">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-800">👨‍🏫 Mentor Dashboard</h1>
+                            <p id="mentorWelcome" class="text-gray-600 mt-2">Manage your students</p>
+                        </div>
+                        <button onclick="logout()" class="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition-colors">Logout</button>
+                    </div>
+                </div>
+                
+                <!-- Announcement Section -->
+                <div class="bg-white rounded-2xl p-6 mb-6 shadow-xl">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">📢 Send Announcement</h2>
+                    <div class="flex gap-4">
+                        <input type="text" id="announcementText" placeholder="Type your announcement here..." class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        <button onclick="sendAnnouncement()" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition-colors font-semibold">Send</button>
+                    </div>
+                    <div id="announcementHistory" class="mt-4 space-y-2"></div>
+                </div>
+                
+                <!-- Assign Marks Section -->
+                <div class="bg-white rounded-2xl p-6 mb-6 shadow-xl">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">📝 Assign Marks</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <select id="studentSelect" class="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Select Student</option>
+                        </select>
+                        <input type="number" id="marksInput" placeholder="Enter marks (0-100)" min="0" max="100" class="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <button onclick="assignMarks()" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors font-semibold">Assign Marks</button>
+                    </div>
+                    <div id="marksHistory" class="space-y-2">
+                        <!-- Recent marks assignments will appear here -->
+                    </div>
+                </div>
+
+                <!-- Students List -->
+                <div class="bg-white rounded-2xl p-6 shadow-xl">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">👥 Your Students</h2>
+                    <div id="mentorStudentsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Students will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floor Wing Dashboard -->
+        <div id="floorWingDashboard" class="hidden min-h-screen p-6">
+            <div class="max-w-7xl mx-auto">
+                <!-- Header -->
+                <div class="bg-white rounded-2xl p-6 mb-6 shadow-xl">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-800">🏢 Floor Wing Dashboard</h1>
+                            <p class="text-gray-600 mt-2">Floor-wise management</p>
+                        </div>
+                        <button onclick="logout()" class="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition-colors">Logout</button>
+                    </div>
+                </div>
+                
+                <!-- Floor Tabs -->
+                <div class="bg-white rounded-2xl p-6 shadow-xl">
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <button onclick="showFloor('Ground Floor')" class="floor-tab bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors">Ground Floor</button>
+                        <button onclick="showFloor('1st Floor')" class="floor-tab bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors">1st Floor</button>
+                        <button onclick="showFloor('2nd Floor')" class="floor-tab bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors">2nd Floor</button>
+                        <button onclick="showFloor('3rd Floor')" class="floor-tab bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors">3rd Floor</button>
+                    </div>
+                    
+                    <div id="floorContent">
+                        <!-- Floor content will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Admin Dashboard -->
+        <div id="adminDashboard" class="hidden min-h-screen p-6">
+            <div class="max-w-7xl mx-auto">
+                <!-- Header -->
+                <div class="bg-white rounded-2xl p-6 mb-6 shadow-xl">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-800">⚙️ Admin Dashboard</h1>
+                            <p class="text-gray-600 mt-2">Complete system overview</p>
+                        </div>
+                        <button onclick="logout()" class="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition-colors">Logout</button>
+                    </div>
+                </div>
+                
+                <!-- System Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-6 text-white">
+                        <div class="text-center">
+                            <p class="text-blue-100">Total Students</p>
+                            <p id="totalStudents" class="text-3xl font-bold">0</p>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-6 text-white">
+                        <div class="text-center">
+                            <p class="text-green-100">Total Mentors</p>
+                            <p id="totalMentors" class="text-3xl font-bold">0</p>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl p-6 text-white">
+                        <div class="text-center">
+                            <p class="text-purple-100">Departments</p>
+                            <p class="text-3xl font-bold">5</p>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-6 text-white">
+                        <div class="text-center">
+                            <p class="text-orange-100">Floors</p>
+                            <p class="text-3xl font-bold">4</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- All Data Tables -->
+                <div class="bg-white rounded-2xl p-6 shadow-xl">
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <button onclick="showAdminTab('students')" class="admin-tab bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">All Students</button>
+                        <button onclick="showAdminTab('mentors')" class="admin-tab bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors">All Mentors</button>
+                        <button onclick="showAdminTab('floors')" class="admin-tab bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors">Floor Data</button>
+                    </div>
+                    
+                    <div id="adminContent">
+                        <!-- Admin content will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Database simulation
+        let database = {
+            students: [],
+            mentors: [],
+            floorWings: [],
+            admins: [{ name: 'Admin', password: 'admin123' }],
+            announcements: []
+        };
+        
+        let currentUser = null;
+        let currentUserType = null;
+        
+        // Initialize with sample data
+        function initializeSampleData() {
+            // Sample students
+            database.students = [
+                { name: 'John Doe', password: 'john123', department: 'Computer Science', mentor: 'Dr. Smith', floor: 'Ground Floor', scores: [92, 88, 85, 90] },
+                { name: 'Jane Wilson', password: 'jane123', department: 'Electronics', mentor: 'Dr. Johnson', floor: '1st Floor', scores: [88, 92, 87, 89] },
+                { name: 'Mike Brown', password: 'mike123', department: 'Mechanical', mentor: 'Dr. Smith', floor: '2nd Floor', scores: [85, 86, 88, 87] }
+            ];
+            
+            // Sample mentors
+            database.mentors = [
+                { name: 'Dr. Smith', password: 'smith123', department: 'Computer Science', floor: 'Ground Floor' },
+                { name: 'Dr. Johnson', password: 'johnson123', department: 'Electronics', floor: '1st Floor' }
+            ];
+            
+            // Sample floor wings
+            database.floorWings = [
+                { name: 'Ground Floor Manager', password: 'ground123', floor: 'Ground Floor' },
+                { name: '1st Floor Manager', password: 'first123', floor: '1st Floor' }
+            ];
+        }
+        
+        initializeSampleData();
+        
+        function showLogin(userType) {
+            const modal = document.getElementById('loginModal');
+            const icon = document.getElementById('loginIcon');
+            const title = document.getElementById('loginTitle');
+            
+            const icons = {
+                student: '👨‍🎓',
+                mentor: '👨‍🏫',
+                floorWing: '🏢',
+                admin: '⚙️'
+            };
+            
+            const titles = {
+                student: 'Student Login',
+                mentor: 'Mentor Login',
+                floorWing: 'Floor Wing Login',
+                admin: 'Admin Login'
+            };
+            
+            icon.textContent = icons[userType];
+            title.textContent = titles[userType];
+            modal.classList.remove('hidden');
+            currentUserType = userType;
+        }
+        
+        function closeLogin() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('loginForm').reset();
+        }
+        
+        function handleLogin(event) {
+            event.preventDefault();
+            const name = document.getElementById('loginName').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            let user = null;
+            let userArray = null;
+            
+            switch(currentUserType) {
+                case 'student':
+                    userArray = database.students;
+                    break;
+                case 'mentor':
+                    userArray = database.mentors;
+                    break;
+                case 'floorWing':
+                    userArray = database.floorWings;
+                    break;
+                case 'admin':
+                    userArray = database.admins;
+                    break;
+            }
+            
+            user = userArray.find(u => u.name === name && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                closeLogin();
+                showDashboard(currentUserType);
+            } else if (currentUserType === 'student') {
+                // Show registration for new students
+                closeLogin();
+                showRegistration();
+            } else if (currentUserType === 'mentor') {
+                // Show registration for new mentors
+                closeLogin();
+                showMentorRegistration();
+            } else if (currentUserType === 'floorWing') {
+                // Show registration for new floor wing managers
+                closeLogin();
+                showFloorWingRegistration();
+            } else if (currentUserType === 'admin') {
+                // Show registration for new admins
+                closeLogin();
+                showAdminRegistration();
+            } else {
+                alert('Invalid credentials! Please try again.');
+            }
+        }
+        
+        // Student Registration Functions
+        function showRegistration() {
+            document.getElementById('registrationModal').classList.remove('hidden');
+        }
+        
+        function closeRegistration() {
+            document.getElementById('registrationModal').classList.add('hidden');
+            document.getElementById('registrationForm').reset();
+        }
+        
+        function handleRegistration(event) {
+            event.preventDefault();
+            const name = document.getElementById('regName').value;
+            const department = document.getElementById('regDepartment').value;
+            const mentor = document.getElementById('regMentor').value;
+            const floor = document.getElementById('regFloor').value;
+            const password = document.getElementById('regPassword').value;
+            
+            const newStudent = {
+                name: name,
+                password: password,
+                department: department,
+                mentor: mentor,
+                floor: floor,
+                scores: [Math.floor(Math.random() * 20) + 80, Math.floor(Math.random() * 20) + 80, Math.floor(Math.random() * 20) + 80, Math.floor(Math.random() * 20) + 80]
+            };
+            
+            database.students.push(newStudent);
+            currentUser = newStudent;
+            currentUserType = 'student';
+            
+            closeRegistration();
+            showDashboard('student');
+            alert('Registration successful! Welcome to Cohort!');
+        }
+        
+        // Mentor Registration Functions
+        function showMentorRegistration() {
+            document.getElementById('mentorRegistrationModal').classList.remove('hidden');
+        }
+        
+        function closeMentorRegistration() {
+            document.getElementById('mentorRegistrationModal').classList.add('hidden');
+            document.getElementById('mentorRegistrationForm').reset();
+        }
+        
+        function handleMentorRegistration(event) {
+            event.preventDefault();
+            const name = document.getElementById('mentorRegName').value;
+            const department = document.getElementById('mentorRegDepartment').value;
+            const floor = document.getElementById('mentorRegFloor').value;
+            const password = document.getElementById('mentorRegPassword').value;
+            
+            const newMentor = {
+                name: name,
+                password: password,
+                department: department,
+                floor: floor
+            };
+            
+            database.mentors.push(newMentor);
+            currentUser = newMentor;
+            currentUserType = 'mentor';
+            
+            closeMentorRegistration();
+            showDashboard('mentor');
+            alert('Mentor registration successful! Welcome to Cohort!');
+        }
+        
+        // Floor Wing Registration Functions
+        function showFloorWingRegistration() {
+            document.getElementById('floorWingRegistrationModal').classList.remove('hidden');
+        }
+        
+        function closeFloorWingRegistration() {
+            document.getElementById('floorWingRegistrationModal').classList.add('hidden');
+            document.getElementById('floorWingRegistrationForm').reset();
+        }
+        
+        function handleFloorWingRegistration(event) {
+            event.preventDefault();
+            const name = document.getElementById('floorWingRegName').value;
+            const floor = document.getElementById('floorWingRegFloor').value;
+            const employeeId = document.getElementById('floorWingRegId').value;
+            const password = document.getElementById('floorWingRegPassword').value;
+            
+            const newFloorWing = {
+                name: name,
+                password: password,
+                floor: floor,
+                employeeId: employeeId
+            };
+            
+            database.floorWings.push(newFloorWing);
+            currentUser = newFloorWing;
+            currentUserType = 'floorWing';
+            
+            closeFloorWingRegistration();
+            showDashboard('floorWing');
+            alert('Floor Wing registration successful! Welcome to Cohort!');
+        }
+        
+        // Admin Registration Functions
+        function showAdminRegistration() {
+            document.getElementById('adminRegistrationModal').classList.remove('hidden');
+        }
+        
+        function closeAdminRegistration() {
+            document.getElementById('adminRegistrationModal').classList.add('hidden');
+            document.getElementById('adminRegistrationForm').reset();
+        }
+        
+        function handleAdminRegistration(event) {
+            event.preventDefault();
+            const name = document.getElementById('adminRegName').value;
+            const level = document.getElementById('adminRegLevel').value;
+            const adminCode = document.getElementById('adminRegCode').value;
+            const password = document.getElementById('adminRegPassword').value;
+            
+            // Simple admin code validation
+            const validCodes = ['ADMIN2024', 'SUPER123', 'COHORT_ADMIN'];
+            if (!validCodes.includes(adminCode)) {
+                alert('Invalid admin authorization code!');
+                return;
+            }
+            
+            const newAdmin = {
+                name: name,
+                password: password,
+                level: level,
+                adminCode: adminCode
+            };
+            
+            database.admins.push(newAdmin);
+            currentUser = newAdmin;
+            currentUserType = 'admin';
+            
+            closeAdminRegistration();
+            showDashboard('admin');
+            alert('Admin registration successful! Welcome to Cohort!');
+        }
+        
+        function showDashboard(userType) {
+            // Hide all pages
+            document.getElementById('landingPage').classList.add('hidden');
+            document.getElementById('studentDashboard').classList.add('hidden');
+            document.getElementById('mentorDashboard').classList.add('hidden');
+            document.getElementById('floorWingDashboard').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+            
+            // Show appropriate dashboard
+            switch(userType) {
+                case 'student':
+                    document.getElementById('studentDashboard').classList.remove('hidden');
+                    loadStudentDashboard();
+                    break;
+                case 'mentor':
+                    document.getElementById('mentorDashboard').classList.remove('hidden');
+                    loadMentorDashboard();
+                    break;
+                case 'floorWing':
+                    document.getElementById('floorWingDashboard').classList.remove('hidden');
+                    loadFloorWingDashboard();
+                    break;
+                case 'admin':
+                    document.getElementById('adminDashboard').classList.remove('hidden');
+                    loadAdminDashboard();
+                    break;
+            }
+        }
+        
+        function loadStudentDashboard() {
+            document.getElementById('studentWelcome').textContent = `Welcome back, ${currentUser.name}!`;
+            
+            // Calculate current score (average of all scores)
+            const avgScore = Math.round(currentUser.scores.reduce((a, b) => a + b, 0) / currentUser.scores.length);
+            document.getElementById('currentScore').textContent = avgScore;
+            
+            // Calculate rank
+            const sortedStudents = database.students.sort((a, b) => {
+                const avgA = a.scores.reduce((sum, score) => sum + score, 0) / a.scores.length;
+                const avgB = b.scores.reduce((sum, score) => sum + score, 0) / b.scores.length;
+                return avgB - avgA;
+            });
+            
+            const rank = sortedStudents.findIndex(s => s.name === currentUser.name) + 1;
+            document.getElementById('classRank').textContent = `#${rank}`;
+            
+            // Load announcements from mentor
+            loadStudentAnnouncements();
+        }
+        
+        function loadStudentAnnouncements() {
+            const announcementsDiv = document.getElementById('studentAnnouncements');
+            const mentorAnnouncements = database.announcements.filter(a => a.mentor === currentUser.mentor);
+            
+            if (mentorAnnouncements.length === 0) {
+                announcementsDiv.innerHTML = `
+                    <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                        <div class="text-4xl mb-2">📭</div>
+                        <p class="text-gray-500">No announcements from your mentor yet.</p>
+                    </div>
+                `;
+            } else {
+                announcementsDiv.innerHTML = mentorAnnouncements.map(ann => `
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <p class="font-semibold text-blue-800 mb-1">📢 ${ann.mentor}</p>
+                                <p class="text-gray-800">${ann.message}</p>
+                                <p class="text-sm text-gray-500 mt-2">📅 ${ann.timestamp}</p>
+                            </div>
+                            <div class="text-2xl">💬</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function loadMentorDashboard() {
+            document.getElementById('mentorWelcome').textContent = `Welcome, ${currentUser.name}!`;
+            
+            // Load students for this mentor
+            const mentorStudents = database.students.filter(s => s.mentor === currentUser.name);
+            const studentsList = document.getElementById('mentorStudentsList');
+            
+            studentsList.innerHTML = mentorStudents.map(student => {
+                const avgScore = Math.round(student.scores.reduce((a, b) => a + b, 0) / student.scores.length);
+                return `
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <h3 class="font-bold text-lg">${student.name}</h3>
+                        <p class="text-gray-600">Department: ${student.department}</p>
+                        <p class="text-gray-600">Floor: ${student.floor}</p>
+                        <p class="text-blue-600 font-semibold">Avg Score: ${avgScore}</p>
+                        <div class="mt-2 text-sm text-gray-500">
+                            Recent Scores: ${student.scores.slice(-3).join(', ')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Populate student dropdown for marks assignment
+            const studentSelect = document.getElementById('studentSelect');
+            studentSelect.innerHTML = '<option value="">Select Student</option>' + 
+                mentorStudents.map(student => `<option value="${student.name}">${student.name}</option>`).join('');
+            
+            // Load announcements and marks history
+            loadAnnouncementHistory();
+            loadMarksHistory();
+        }
+        
+        function sendAnnouncement() {
+            const text = document.getElementById('announcementText').value;
+            if (text.trim()) {
+                const announcement = {
+                    mentor: currentUser.name,
+                    message: text,
+                    timestamp: new Date().toLocaleString()
+                };
+                database.announcements.push(announcement);
+                document.getElementById('announcementText').value = '';
+                loadAnnouncementHistory();
+            }
+        }
+        
+        function assignMarks() {
+            const studentName = document.getElementById('studentSelect').value;
+            const marks = parseInt(document.getElementById('marksInput').value);
+            
+            if (!studentName) {
+                alert('Please select a student!');
+                return;
+            }
+            
+            if (isNaN(marks) || marks < 0 || marks > 100) {
+                alert('Please enter valid marks between 0 and 100!');
+                return;
+            }
+            
+            // Find the student and add the new score
+            const student = database.students.find(s => s.name === studentName && s.mentor === currentUser.name);
+            if (student) {
+                student.scores.push(marks);
+                
+                // Add to marks history for tracking
+                if (!database.marksHistory) {
+                    database.marksHistory = [];
+                }
+                
+                database.marksHistory.push({
+                    mentor: currentUser.name,
+                    student: studentName,
+                    marks: marks,
+                    timestamp: new Date().toLocaleString()
+                });
+                
+                // Clear inputs
+                document.getElementById('studentSelect').value = '';
+                document.getElementById('marksInput').value = '';
+                
+                // Refresh displays
+                loadMentorDashboard();
+                
+                alert(`Successfully assigned ${marks} marks to ${studentName}!`);
+            }
+        }
+        
+        function loadMarksHistory() {
+            const history = document.getElementById('marksHistory');
+            if (!database.marksHistory) {
+                database.marksHistory = [];
+            }
+            
+            const mentorMarksHistory = database.marksHistory.filter(m => m.mentor === currentUser.name);
+            
+            if (mentorMarksHistory.length === 0) {
+                history.innerHTML = `
+                    <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                        <p class="text-gray-500">No marks assigned yet.</p>
+                    </div>
+                `;
+            } else {
+                history.innerHTML = mentorMarksHistory.slice(-5).reverse().map(mark => `
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-3 rounded flex justify-between items-center">
+                        <div>
+                            <p class="font-semibold">${mark.student}: <span class="text-blue-600">${mark.marks}/100</span></p>
+                            <p class="text-sm text-gray-500">${mark.timestamp}</p>
+                        </div>
+                        <div class="text-2xl">📊</div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function loadAnnouncementHistory() {
+            const history = document.getElementById('announcementHistory');
+            const mentorAnnouncements = database.announcements.filter(a => a.mentor === currentUser.name);
+            
+            history.innerHTML = mentorAnnouncements.map(ann => `
+                <div class="bg-green-50 border-l-4 border-green-500 p-3 rounded">
+                    <p class="font-semibold">${ann.message}</p>
+                    <p class="text-sm text-gray-500">${ann.timestamp}</p>
+                </div>
+            `).join('');
+        }
+        
+        function loadFloorWingDashboard() {
+            showFloor('Ground Floor');
+        }
+        
+        function showFloor(floor) {
+            // Update tab styles
+            document.querySelectorAll('.floor-tab').forEach(tab => {
+                tab.classList.remove('bg-purple-500', 'text-white');
+                tab.classList.add('bg-gray-300', 'text-gray-700');
+            });
+            event.target.classList.remove('bg-gray-300', 'text-gray-700');
+            event.target.classList.add('bg-purple-500', 'text-white');
+            
+            // Load floor data
+            const floorStudents = database.students.filter(s => s.floor === floor);
+            const floorMentors = database.mentors.filter(m => m.floor === floor);
+            
+            const content = document.getElementById('floorContent');
+            content.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">👥 Students on ${floor}</h3>
+                        <div class="space-y-3">
+                            ${floorStudents.map(student => {
+                                const avgScore = Math.round(student.scores.reduce((a, b) => a + b, 0) / student.scores.length);
+                                return `
+                                    <div class="bg-blue-50 rounded-lg p-4">
+                                        <h4 class="font-semibold">${student.name}</h4>
+                                        <p class="text-sm text-gray-600">Department: ${student.department}</p>
+                                        <p class="text-sm text-gray-600">Mentor: ${student.mentor}</p>
+                                        <p class="text-blue-600 font-semibold">Score: ${avgScore}</p>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">👨‍🏫 Mentors on ${floor}</h3>
+                        <div class="space-y-3">
+                            ${floorMentors.map(mentor => `
+                                <div class="bg-green-50 rounded-lg p-4">
+                                    <h4 class="font-semibold">${mentor.name}</h4>
+                                    <p class="text-sm text-gray-600">Department: ${mentor.department}</p>
+                                    <p class="text-green-600 font-semibold">Students: ${floorStudents.filter(s => s.mentor === mentor.name).length}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function loadAdminDashboard() {
+            // Update stats
+            document.getElementById('totalStudents').textContent = database.students.length;
+            document.getElementById('totalMentors').textContent = database.mentors.length;
+            
+            showAdminTab('students');
+        }
+        
+        function showAdminTab(tab) {
+            // Update tab styles
+            document.querySelectorAll('.admin-tab').forEach(tabEl => {
+                tabEl.classList.remove('bg-red-500', 'text-white');
+                tabEl.classList.add('bg-gray-300', 'text-gray-700');
+            });
+            event.target.classList.remove('bg-gray-300', 'text-gray-700');
+            event.target.classList.add('bg-red-500', 'text-white');
+            
+            const content = document.getElementById('adminContent');
+            
+            switch(tab) {
+                case 'students':
+                    content.innerHTML = `
+                        <h3 class="text-xl font-bold mb-4">All Students</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            ${database.students.map(student => {
+                                const avgScore = Math.round(student.scores.reduce((a, b) => a + b, 0) / student.scores.length);
+                                return `
+                                    <div class="bg-blue-50 rounded-lg p-4">
+                                        <h4 class="font-semibold">${student.name}</h4>
+                                        <p class="text-sm text-gray-600">Department: ${student.department}</p>
+                                        <p class="text-sm text-gray-600">Mentor: ${student.mentor}</p>
+                                        <p class="text-sm text-gray-600">Floor: ${student.floor}</p>
+                                        <p class="text-blue-600 font-semibold">Avg Score: ${avgScore}</p>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                    break;
+                case 'mentors':
+                    content.innerHTML = `
+                        <h3 class="text-xl font-bold mb-4">All Mentors</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            ${database.mentors.map(mentor => {
+                                const studentCount = database.students.filter(s => s.mentor === mentor.name).length;
+                                return `
+                                    <div class="bg-green-50 rounded-lg p-4">
+                                        <h4 class="font-semibold">${mentor.name}</h4>
+                                        <p class="text-sm text-gray-600">Department: ${mentor.department}</p>
+                                        <p class="text-sm text-gray-600">Floor: ${mentor.floor}</p>
+                                        <p class="text-green-600 font-semibold">Students: ${studentCount}</p>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                    break;
+                case 'floors':
+                    const floors = ['Ground Floor', '1st Floor', '2nd Floor', '3rd Floor'];
+                    content.innerHTML = `
+                        <h3 class="text-xl font-bold mb-4">Floor-wise Data</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            ${floors.map(floor => {
+                                const floorStudents = database.students.filter(s => s.floor === floor);
+                                const floorMentors = database.mentors.filter(m => m.floor === floor);
+                                return `
+                                    <div class="bg-purple-50 rounded-lg p-4">
+                                        <h4 class="font-semibold text-lg">${floor}</h4>
+                                        <p class="text-sm text-gray-600">Students: ${floorStudents.length}</p>
+                                        <p class="text-sm text-gray-600">Mentors: ${floorMentors.length}</p>
+                                        <div class="mt-2">
+                                            <p class="text-xs text-gray-500">Departments:</p>
+                                            <p class="text-xs text-purple-600">${[...new Set(floorStudents.map(s => s.department))].join(', ')}</p>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                    break;
+            }
+        }
+        
+        function logout() {
+            currentUser = null;
+            currentUserType = null;
+            
+            // Hide all dashboards
+            document.getElementById('studentDashboard').classList.add('hidden');
+            document.getElementById('mentorDashboard').classList.add('hidden');
+            document.getElementById('floorWingDashboard').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+            
+            // Show landing page
+            document.getElementById('landingPage').classList.remove('hidden');
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'988aa797e01c4da5',t:'MTc1OTQ3NTc5My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
